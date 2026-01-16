@@ -1,18 +1,11 @@
-// First, we import the module
 const express = require("express");
-// Then, we invoke it
+const path = require("path");
 const app = express();
 
 app.get("/", (req, res) => {
-  console.log("User hit the result");
-  res.status(200).send("Home Page");
+  res.sendFile(path.resolve(__dirname, "./navbar-app/index.html"));
 });
 
-app.get("/about", (req, res) => {
-  res.status(200).send("About Page");
-});
-
-//       path,    callback
 app.all("*", (req, res) => {
   res.status(404).send("<h1>Resource not found</h1>");
 });
@@ -20,11 +13,3 @@ app.all("*", (req, res) => {
 app.listen(5000, () => {
   console.log("Server is listening on port 5000");
 });
-
-// app.get
-// app.post
-// app.put
-// app.delete
-// app.all -> Works with all of previous methods
-// app.use -> For middleware
-// app.listen
