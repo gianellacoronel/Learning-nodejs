@@ -3,6 +3,10 @@ const express = require("express");
 // Then, we invoke it
 const app = express();
 
+app.get("/", (req, res) => {
+  res.send("Home Page");
+});
+
 app.listen(5000, () => {
   console.log("Server is listening on port 5000");
 });
