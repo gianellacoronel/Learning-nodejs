@@ -18,6 +18,7 @@ app.get("/api/products", (req, res) => {
 });
 
 // Route params
+// http://localhost:5000/api/products/1
 app.get("/api/products/:id", (req, res) => {
   console.log(req);
   console.log(req.params); // { id: '1' }
@@ -34,7 +35,33 @@ app.get("/api/products/:id", (req, res) => {
 
 app.get("/api/products/:productId/reviews/:reviewId", (req, res) => {
   console.log(req.params); //{ productId: '2', reviewId: 'rs' }
-  return res.send("hi");
+  return res.send("hi params");
+});
+
+// Query string
+// http://localhost:5000/api/v1/query?search=a&limit=2
+app.get("/api/v1/query", (req, res) => {
+  console.log(req.query); // { search: 'a', limit: '2' }
+
+  const { search, limit } = req.query;
+
+  let sortedProducts = [...products];
+
+  if (search) {
+    sortedProducts = sortedProducts.filter((product) => {
+      return product.name.startsWith(search);
+    });
+  }
+
+  if (limit) {
+    sortedProducts = sortedProducts.slice(0, Number(limit));
+  }
+
+  if (sortedProducts.length < 1) {
+    // res.status(200).send("No products matched your search");
+    return res.status(200).json({ success: true, data: [] });
+  }
+  res.status(200).json(sortedProducts);
 });
 
 app.listen(5000, () => {
