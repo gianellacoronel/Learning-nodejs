@@ -1,22 +1,25 @@
 const express = require("express");
 const app = express();
+const logger = require("./logger");
 
-// req => middleware => res
-// MIDDLEWARE FUNCTION
-const logger = (req, res, next) => {
-  const method = req.method;
-  const url = req.url;
-  const time = new Date().getFullYear();
-  console.log(method, url, time); // GET / 2026
-  next(); // IT'S IMPORTANT TO CALL NEXT() TO MOVE TO THE NEXT MIDDLEWARE FUNCTION
-};
+// This always need to be before the routes we want to log
+// Because express executes code in order
+app.use(logger);
+// app.use("/api", logger); // This middleware will only affect to routes that starts with /api
 
-app.get("/", logger, (req, res) => {
+app.get("/", (req, res) => {
   res.send("Home");
 });
 
-app.get("/about", logger, (req, res) => {
+app.get("/about", (req, res) => {
   res.send("About");
+});
+app.get("/api/products", (req, res) => {
+  res.send("Products");
+});
+
+app.get("/api/items", (req, res) => {
+  res.send("Items");
 });
 
 app.listen(5000, () => {
