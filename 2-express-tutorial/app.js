@@ -3,10 +3,12 @@ const app = express();
 const logger = require("./logger");
 const authorize = require("./authorize");
 
-// This always need to be before the routes we want to log
-// Because express executes code in order
-app.use([logger, authorize]);
-// app.use("/api", logger); // This middleware will only affect to routes that starts with /api
+// req => middleware => res
+
+// 1. use vs route
+// 2. options - our own / express / third party
+
+// app.use([logger, authorize]);
 
 app.get("/", (req, res) => {
   res.send("Home");
@@ -15,9 +17,8 @@ app.get("/", (req, res) => {
 app.get("/about", (req, res) => {
   res.send("About");
 });
-app.get("/api/products", (req, res) => {
-  // http://localhost:5000/api/products?user=bruce
-  console.log(req.user); //{ name: 'bruce', id: 7 }
+// We can use multiple middleware for a specific route
+app.get("/api/products", [logger, authorize], (req, res) => {
   res.send("Products");
 });
 
