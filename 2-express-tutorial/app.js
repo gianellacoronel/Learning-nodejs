@@ -7,13 +7,28 @@ app.use(express.static("./methods-public"));
 
 // parse form data
 // We have to use here to get body in POST request
+// For HTML traditional form
 app.use(express.urlencoded({ extended: false }));
+
+// parse json
+// For javascript form
+app.use(express.json());
 
 app.get("/api/people", (req, res) => {
   res.status(200).json({ success: true, data: people });
 });
 
+app.post("/api/people", (req, res) => {
+  // For javascript form
+  const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ success: false, msg: "Please provide name" });
+  }
+  res.status(201).json({ success: true, person: name });
+});
+
 app.post("/login", (req, res) => {
+  // For HTML traditional form
   const { name } = req.body;
   if (name) {
     return res.status(200).send(`Welcome ${name}`);
