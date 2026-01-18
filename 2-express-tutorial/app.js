@@ -1,29 +1,9 @@
 const express = require("express");
 const app = express();
-const logger = require("./logger");
-const authorize = require("./authorize");
+let { people } = require("./data");
 
-// req => middleware => res
-
-// 1. use vs route
-// 2. options - our own / express / third party
-
-// app.use([logger, authorize]);
-
-app.get("/", (req, res) => {
-  res.send("Home");
-});
-
-app.get("/about", (req, res) => {
-  res.send("About");
-});
-// We can use multiple middleware for a specific route
-app.get("/api/products", [logger, authorize], (req, res) => {
-  res.send("Products");
-});
-
-app.get("/api/items", (req, res) => {
-  res.send("Items");
+app.get("/api/people", (req, res) => {
+  res.status(200).json({ success: true, data: people });
 });
 
 app.listen(5000, () => {
